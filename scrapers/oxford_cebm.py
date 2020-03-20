@@ -8,10 +8,13 @@ from bs4 import BeautifulSoup
 
 BASE_URL = "https://www.cebm.net/oxford-covid-19/"
 
+def get_soup(url_):
+    page = requests.get(url_)   
+    return BeautifulSoup(page.content)
+
+
 def get_links():
-    page = requests.get(BASE_URL)   
-    soup = BeautifulSoup(page.content)
- 
+    soup = get_soup(BASE_URL)
     main_div = soup.find("div", id="mainMenu")  
      
     ev_service_div = main_div.find("div", {"class":"content twelve columns"})  
@@ -24,6 +27,12 @@ def get_links():
         for link_elem in ul.find_all("a"):
             links.append(link_elem.get("href"))
     return links 
+
+
+def fetch_content_for_page(page_url):
+    soup = get_soup(page_url)
+
+    
 
 
 links = oxford_cebm.get_links()
