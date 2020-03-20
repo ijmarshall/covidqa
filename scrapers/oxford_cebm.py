@@ -5,6 +5,7 @@ from urllib import request, response, error, parse
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
+import os 
 
 BASE_URL = "https://www.cebm.net/oxford-covid-19/"
 
@@ -32,10 +33,29 @@ def get_links():
 def fetch_content_for_page(page_url):
     soup = get_soup(page_url)
 
-    
+
+def get_pdf_from_link(page_url):
+    soup = get_soup(page_url)
+    ps = soup.find("div", {"class":"content twelve columns"}).find_all("p")
+    for p in ps: 
+        if "PDF to download" in p.text:
+            pdf_url = p.find("a").get("href") 
+            fname = os.path.split(pdf_url)[-1]
+            path = os.path.join("..", "pdfs/{}".format(fname))
+            download_pdf(pdf_url, path)
+            return fname 
+
+def download_pdf(pdf_url, out_path):
+    r = requests.get(pdf_url, stream = True) 
+      
+    with open(out_path,"wb") as pdf: 
+        for chunk in r.iter_content(chunk_size=1024): 
+             if chunk: 
+                 pdf.write(chunk)
 
 
-links = oxford_cebm.get_links()
+
+#links = oxford_cebm.get_links()
 
 '''
 <ul>
