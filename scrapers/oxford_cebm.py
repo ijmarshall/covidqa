@@ -10,13 +10,10 @@ BASE_URL = "https://www.cebm.net/oxford-covid-19/"
 
 def get_links():
     page = requests.get(BASE_URL)   
-
     soup = BeautifulSoup(page.content)
-
-
-    #main_div = list(soup.find_all("div", id="mainMenu")) 
+ 
     main_div = soup.find("div", id="mainMenu")  
-    #ps = main_div.find_all("p")  
+     
     ev_service_div = main_div.find("div", {"class":"content twelve columns"})  
 
     ps = ev_service_div.find_all("p")
