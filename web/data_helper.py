@@ -16,11 +16,13 @@ def get_sentences(html):
 
 def get_docs():
     df = pd.read_csv("../data/nhs_corona.csv")
-    doc_texts, doc_html = [], []
-    for d in df['text'].values:
+    doc_texts, doc_urls, doc_titles = [], [], []
+    # @TODO this is silly, sorry
+    for d, link, title in zip(df['text'].values, df['url'].values, df['title'].values):
         try:
             doc_texts.append(list(get_sentences(d)))
-            doc_html.append(d)
+            doc_urls.append(link)
+            doc_titles.append(title)
         except:
             pass
-    return doc_texts, doc_html
+    return doc_texts, doc_urls, doc_titles
