@@ -28,7 +28,7 @@ app = Flask(__name__)
 # DBSession = sessionmaker(bind=engine)
 # session = DBSession()
 doc_texts, doc_urls, doc_titles = data_helper.get_docs()
-print("embedding all articles... ")
+print("embedding all {} articles... ".format(len(doc_texts)))
 article_embeddings = retriever.embed_docs(doc_texts)
 print("done")
 
