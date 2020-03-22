@@ -15,7 +15,9 @@ def get_sentences(html):
     return spacy_text.sents
 
 def get_docs():
-    df = pd.read_csv("../data/nhs_corona.csv")
+    # TODO generalize
+    #df = pd.read_csv("../data/nhs_corona.csv")
+    df = pd.read_csv("../data/nbmedical.csv")
     doc_texts, doc_urls, doc_titles = [], [], []
     # @TODO this is silly, sorry
     for d, link, title in zip(df['text'].values, df['url'].values, df['title'].values):

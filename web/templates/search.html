@@ -19,10 +19,12 @@
           </form>
         </div>
 
-        {% if res_title is not none %}
+        {% if results is not none %}
           <div class="row">
            <h3>Result</h3>
-           <a href='{{ res_url }}'>{{ res_title }}</a>
+           {% for res_title, res_url in results %}
+            <a href='{{ res_url }}'>{{ res_title }}</a><br/>
+           {% endfor %}
           </div>
         {% endif %}
 

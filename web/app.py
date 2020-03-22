@@ -29,24 +29,28 @@ app = Flask(__name__)
 # session = DBSession()
 doc_texts, doc_urls, doc_titles = data_helper.get_docs()
 print("embedding all articles... ")
-article_embeddings = retriever.embed_docs(doc_texts)#[:5])
+article_embeddings = retriever.embed_docs(doc_texts)
 print("done")
 
 # Display all things
 @app.route('/')
 def show_main():
-    return render_template('search.html', res_title=None, res_url=None)
+    return render_template('search.html', results=None)
 
 
 @app.route('/', methods=['POST'])
-def my_form_post():
+def retrieve(k=5):
     q = request.form['text']
     results = retriever.rank_for_q(q, article_embeddings)
-    best_doc_idx = results[0][0]
-    best_article_url = doc_urls[best_doc_idx]
-    best_article_title = doc_titles[best_doc_idx]
 
-    return render_template('search.html', res_title=best_article_title, res_url=best_article_url)
+    titles, urls = [], []
+    for i in range(k):
+    	doc_idx = results[i][0]
+    	titles.append(doc_titles[doc_idx])
+    	urls.append(doc_urls[doc_idx])
+
+    #import pdb; pdb.set_trace()
+    return render_template('search.html', results=zip(titles, urls))
     
 
 
