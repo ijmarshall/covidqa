@@ -15,6 +15,8 @@ import json
 import httplib2
 import requests
 
+import data_helper 
+import retriever 
 
 app = Flask(__name__)
 
@@ -25,7 +27,10 @@ app = Flask(__name__)
 
 # DBSession = sessionmaker(bind=engine)
 # session = DBSession()
-
+doc_texts, doc_html = data_helper.get_docs()
+print("embedding all articles... ")
+article_embeddings = retriever.embed_docs(doc_texts[:5])
+print("done")
 
 # Display all things
 @app.route('/')
@@ -35,9 +40,11 @@ def show_main():
 
 @app.route('/', methods=['POST'])
 def my_form_post():
-    text = request.form['text']
+    q = request.form['text']
+    results = retriever.rank_for_q(q, article_embeddings)
+    best_article = doc_html[results[0][0]]
+
     import pdb; pdb.set_trace()
-    return processed_text
 
 
 if __name__ == '__main__':
